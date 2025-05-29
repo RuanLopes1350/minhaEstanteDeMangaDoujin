@@ -1,15 +1,66 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// Configuração do Prisma
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // Você pode mudar para outro BD se preferir
   url      = env("DATABASE_URL")
+}
+
+// Modelos baseados nas suas interfaces TypeScript
+model Usuario {
+  id              String    @id @default(uuid())
+  nome            String
+  email           String    @unique
+  senha           String
+  data_nascimento DateTime
+  data_cadastro   DateTime  @default(now())
+  avatar          String?
+  lista_leitura   Manga[]   @relation("UsuarioMangas")
+  colecoes        Colecao[]
+
+  @@map("usuarios")
+}
+
+model Manga {
+  id                     String   @id @default(uuid())
+  status                 String
+  titulo_japones         String?
+  titulo                 String
+  sinopse                String?  @db.Text
+  autor                  String?
+  data_lancamento        DateTime?
+  pagina                 Int
+  capitulo               Int?
+  volume                 Int?
+  idioma                 String
+  data_inicio_leitura    DateTime
+  data_ultima_atualizacao DateTime
+  data_fim_leitura       DateTime?
+  tags                   String[] 
+  nsfw                   Boolean
+  link_leitura           String
+  link_capa              String
+  avaliacao              Float
+
+  usuarios               Usuario[] @relation("UsuarioMangas")
+  colecoes               Colecao[] @relation("ColecaoMangas")
+
+  @@map("mangas")
+}
+
+model Colecao {
+  id               String   @id @default(uuid())
+  nome             String
+  descricao        String?  @db.Text
+  usuario_id       String
+  public           Boolean  @default(false)
+  data_criacao     DateTime @default(now())
+  data_atualizacao DateTime @default(now())
+
+  usuario          Usuario  @relation(fields: [usuario_id], references: [id])
+  conteudo         Manga[]  @relation("ColecaoMangas")
+
+  @@map("colecoes")
 }

@@ -1,5 +1,22 @@
 {
   "devDependencies": {
     "prisma": "^6.8.2"
+  },
+  "name": "minhaestantedemangadoujin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/adapter-pg": "^6.8.2",
+    "@prisma/client": "^6.8.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4"
   }
 }
